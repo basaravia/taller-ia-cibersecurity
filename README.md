@@ -3,7 +3,7 @@
 Repositorio de práctica para poner a prueba, de forma guiada, los escenarios de riesgo descritos en:
 
 - **[OWASP Top 10 for LLM Applications (2025)](https://genai.owasp.org/llm-top-10/)**
-- **[OWASP Agentic AI — Threats and Mitigations](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/)**
+- **[OWASP Top 10 for Agentic Applications (2026, v2.01)](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/)**
 
 ## Cómo está organizado
 
@@ -39,22 +39,22 @@ git checkout llm/01-prompt-injection   # o cualquier otra rama de la tabla
 | LLM09 | Misinformation | [`llm/09-misinformation`](../../tree/llm/09-misinformation) |
 | LLM10 | Unbounded Consumption | [`llm/10-unbounded-consumption`](../../tree/llm/10-unbounded-consumption) |
 
-## Índice de escenarios — OWASP Agentic AI Threats
+## Índice de escenarios — OWASP Top 10 for Agentic Applications
 
-> OWASP no publica una lista numerada "Top 10" tan estandarizada para Agentic AI como la de LLM (su whitepaper lista ~15 amenazas). Aquí se seleccionaron las 10 más relevantes para el taller; cada rama enlaza a la fuente oficial para validar vigencia.
+> Framework publicado por el OWASP GenAI Security Project el 2025-12-09 (revisión v2.01, 2026-06-01), la primera taxonomía de la industria revisada por pares específica para riesgos de seguridad en aplicaciones agentic. No tiene páginas individuales por ítem (a diferencia del Top 10 de LLM), así que cada rama enlaza al documento completo.
 
 | # | Riesgo | Rama |
 |---|---|---|
-| 1 | Memory Poisoning | [`agent/01-memory-poisoning`](../../tree/agent/01-memory-poisoning) |
-| 2 | Tool Misuse | [`agent/02-tool-misuse`](../../tree/agent/02-tool-misuse) |
-| 3 | Privilege Compromise | [`agent/03-privilege-compromise`](../../tree/agent/03-privilege-compromise) |
-| 4 | Resource Overload | [`agent/04-resource-overload`](../../tree/agent/04-resource-overload) |
-| 5 | Cascading Hallucination Effects | [`agent/05-cascading-hallucination`](../../tree/agent/05-cascading-hallucination) |
-| 6 | Intent Breaking & Goal Manipulation | [`agent/06-intent-goal-manipulation`](../../tree/agent/06-intent-goal-manipulation) |
-| 7 | Misaligned & Deceptive Behaviors | [`agent/07-misaligned-deceptive-behavior`](../../tree/agent/07-misaligned-deceptive-behavior) |
-| 8 | Identity Spoofing & Impersonation | [`agent/08-identity-spoofing`](../../tree/agent/08-identity-spoofing) |
-| 9 | Overwhelming Human-in-the-Loop / Human Trust Manipulation | [`agent/09-human-trust-manipulation`](../../tree/agent/09-human-trust-manipulation) |
-| 10 | Rogue Agents in Multi-Agent Systems | [`agent/10-rogue-multi-agent-systems`](../../tree/agent/10-rogue-multi-agent-systems) |
+| ASI01 | Agent Goal Hijack | [`agent/01-agent-goal-hijack`](../../tree/agent/01-agent-goal-hijack) |
+| ASI02 | Tool Misuse & Exploitation | [`agent/02-tool-misuse`](../../tree/agent/02-tool-misuse) |
+| ASI03 | Identity & Privilege Abuse | [`agent/03-identity-privilege-abuse`](../../tree/agent/03-identity-privilege-abuse) |
+| ASI04 | Agentic Supply Chain Vulnerabilities | [`agent/04-agentic-supply-chain`](../../tree/agent/04-agentic-supply-chain) |
+| ASI05 | Unexpected Code Execution (RCE) | [`agent/05-unexpected-code-execution`](../../tree/agent/05-unexpected-code-execution) |
+| ASI06 | Memory & Context Poisoning | [`agent/06-memory-context-poisoning`](../../tree/agent/06-memory-context-poisoning) |
+| ASI07 | Insecure Inter-Agent Communication | [`agent/07-insecure-inter-agent-communication`](../../tree/agent/07-insecure-inter-agent-communication) |
+| ASI08 | Cascading Failures | [`agent/08-cascading-failures`](../../tree/agent/08-cascading-failures) |
+| ASI09 | Human-Agent Trust Exploitation | [`agent/09-human-agent-trust-exploitation`](../../tree/agent/09-human-agent-trust-exploitation) |
+| ASI10 | Rogue Agents | [`agent/10-rogue-agents`](../../tree/agent/10-rogue-agents) |
 
 ## Estado actual
 
