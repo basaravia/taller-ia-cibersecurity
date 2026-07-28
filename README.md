@@ -56,9 +56,21 @@ git checkout llm/01-prompt-injection   # o cualquier otra rama de la tabla
 | ASI09 | Human-Agent Trust Exploitation | [`agent/09-human-agent-trust-exploitation`](../../tree/agent/09-human-agent-trust-exploitation) |
 | ASI10 | Rogue Agents | [`agent/10-rogue-agents`](../../tree/agent/10-rogue-agents) |
 
+## Agente de referencia (`agent-cli/`)
+
+`main` tambien incluye [`agent-cli/`](./agent-cli), el agente CLI que se usa como base para
+ejercitar los escenarios de las ramas `agent/*` (y varios de `llm/*`): LangChain + LangGraph,
+memoria persistente (SQLite o Postgres) y proveedor de LLM intercambiable (Docker Model
+Runner local por defecto, Azure AI Foundry o Groq). La tool de busqueda web se apoya en el
+servidor MCP de [`langchain-mcp-duckduckgo`](https://github.com/basaravia/langchain-mcp-duckduckgo).
+
+Dos notebooks en [`agent-cli/notebooks/`](./agent-cli/notebooks) ejercitan los 20 escenarios
+con prompts concretos contra ese agente: `owasp_llm_top10.ipynb` y `owasp_agentic_top10.ipynb`.
+Ver [`agent-cli/README.md`](./agent-cli/README.md) para instalacion y uso.
+
 ## Estado actual
 
-Primera pasada: estructura y documentación por escenario (descripción del riesgo, por qué importa, escenario de prueba propuesto, checklist y referencias). El código de las demos se agrega en una siguiente iteración dentro de `scenario/src/` en cada rama.
+Estructura y documentación por escenario (descripción del riesgo, por qué importa, escenario de prueba propuesto, checklist y referencias) en cada rama `llm/*` y `agent/*`, más el agente de referencia y los notebooks de `agent-cli/` en `main`. El código de demo específico de cada escenario se sigue agregando en `scenario/src/` de cada rama.
 
 ## Licencia
 

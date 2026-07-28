@@ -1,6 +1,8 @@
 # Secrets / env
 .env
-.env.*
+.env.local
+.env.*.local
+!.env.example
 *.key
 *.pem
 
@@ -10,6 +12,13 @@ __pycache__/
 .venv/
 venv/
 .pytest_cache/
+.ipynb_checkpoints/
+
+# Local data / memory stores
+data/
+*.sqlite
+*.sqlite3
+*.db
 
 # Node
 node_modules/
