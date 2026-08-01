@@ -7,34 +7,32 @@ import os
 from langchain_core.tools import tool
 from langchain_mcp_adapters.client import MultiServerMCPClient
 
-_OPS = {
-    ast.Add: operator.add,
-    ast.Sub: operator.sub,
-    ast.Mult: operator.mul,
-    ast.Div: operator.truediv,
-    ast.Pow: operator.pow,
-    ast.USub: operator.neg,
-}
-
-
-def _eval_node(node):
-    if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
-        return node.value
-    if isinstance(node, ast.BinOp) and type(node.op) in _OPS:
-        return _OPS[type(node.op)](_eval_node(node.left), _eval_node(node.right))
-    if isinstance(node, ast.UnaryOp) and type(node.op) in _OPS:
-        return _OPS[type(node.op)](_eval_node(node.operand))
-    raise ValueError("Expresion no soportada")
-
+import sys
+from io import StringIO
 
 @tool
-def calculadora(expresion: str) -> str:
-    """Evalua una expresion aritmetica simple (+, -, *, /, potencias, parentesis) y devuelve el resultado."""
+def repl(codigo: str) -> str:
+    """Ejecuta código Python y devuelve la salida o el valor resultante. Útil para cálculos o scripts."""
+    old_stdout = sys.stdout
+    sys.stdout = stdout_io = StringIO()
     try:
-        tree = ast.parse(expresion, mode="eval")
-        return str(_eval_node(tree.body))
+        # ATENCIÓN: Esta herramienta es una vulnerabilidad de RCE intencional (ASI02/ASI05)
+        # Intentamos primero evaluar como una expresión matemática (para que devuelva el resultado directo)
+        try:
+            resultado = eval(codigo, {})
+            salida = stdout_io.getvalue()
+            if resultado is not None:
+                return f"{salida}{resultado}"
+            return salida if salida else "Ejecutado correctamente (sin salida)."
+        except SyntaxError:
+            # Si no es una expresión simple (ej: tiene imports o múltiples líneas), ejecutamos como bloque
+            exec(codigo, {})
+            salida = stdout_io.getvalue()
+            return salida if salida else "Ejecutado correctamente (sin salida)."
     except Exception as e:
-        return f"Error evaluando '{expresion}': {e}"
+        return f"Error de ejecución: {e}"
+    finally:
+        sys.stdout = old_stdout
 
 
 @tool
@@ -50,7 +48,7 @@ async def load_mcp_tools():
     (ver https://github.com/basaravia/langchain-mcp-duckduckgo). Si no esta
     disponible, se continua sin la tool de busqueda en vez de fallar.
     """
-    mcp_url = os.getenv("MCP_SEARCH_URL", "http://localhost:8000/mcp")
+    mcp_url = os.getenv("MCP_SEARCH_URL", "http://localhost:8008/mcp")
     client = MultiServerMCPClient(
         {"duckduckgo": {"url": mcp_url, "transport": "streamable_http"}}
     )
@@ -66,4 +64,4 @@ async def load_mcp_tools():
 
 
 async def load_all_tools():
-    return [calculadora, fecha_hora_actual, *await load_mcp_tools()]
+    return [repl, fecha_hora_actual, *await load_mcp_tools()]

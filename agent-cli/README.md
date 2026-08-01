@@ -89,6 +89,56 @@ python cli.py --provider groq --memory postgres --session demo-groq
 
 Escribe `salir`, `exit` o `quit` para terminar.
 
+## Malla de 4 agentes (ASI07 / ASI10)
+
+`agent_mesh/` es una malla minima de 4 agentes (planificador, ejecutor,
+revisor y rogue) que reutiliza el mismo LLM de `agent-cli` para ejercitar
+dos riesgos de arquitectura multi-agente del OWASP Top 10 for Agentic
+Applications (2026) que el notebook de un solo agente **no** puede
+reproducir (ver `notebooks/owasp_agentic_top10.ipynb`):
+
+- **ASI07 - Insecure Inter-Agent Communication**: el bus interno no
+  autentica remitentes, asi que un agente puede suplantar a otro.
+- **ASI10 - Rogue Agents**: un agente con acceso legitimo a la malla
+  (`rogue`) difunde resultados/instrucciones manipuladas y el resto los
+  acepta sin validacion cruzada ni "kill switch".
+
+```
+agent_mesh/
+  bus.py         # InsecureBus: canal sin autenticacion/firma (ASI07)
+  agents.py       # las 4 personas (system prompts) + ask_persona()
+  llm.py           # LLM de la demo, con max_tokens bajo para no saturar memoria
+  scenario.py       # orquesta el escenario y los disclaimers
+```
+
+Ejecutar (desde `agent-cli/`, con el mismo `.env` del agente principal):
+
+```bash
+python -m agent_mesh.scenario
+```
+
+Por defecto usa el **mismo modelo ya cargado** de `LLM_PROVIDER` (ver
+`agent/llm.py`), con `max_tokens` acotable via `MESH_MODEL_MAX_TOKENS`
+(default 1200, igual que el agente principal). `MESH_MODEL_NAME` (en
+`.env`) permite apuntar la demo a un modelo distinto, pero probado en este
+repo con un modelo mas chico (`ai/smollm2-vllm:1.7B`) mientras el agente
+principal (`ai/qwen3`) seguia cargado, Docker Model Runner devolvio errores
+502 intermitentes por tener 2 modelos locales en memoria a la vez — por eso
+queda sin definir por defecto y la demo simplemente reutiliza el modelo ya
+cargado. Tambien se probo bajar `max_tokens` a 300 (y a 900) para ahorrar
+memoria y rompio algunas respuestas (quedaban vacias): modelos
+"razonadores" como `ai/qwen3` gastan el presupuesto en razonamiento interno
+antes de responder (mismo aviso que en `agent/llm.py`), asi que no bajes
+`MESH_MODEL_MAX_TOKENS` sin probar que las 4 personas sigan respondiendo
+con contenido no vacio.
+
+> **Disclaimer:** `agent_mesh/` es deliberadamente inseguro para fines
+> educativos del taller (ver los comentarios "ATENCION" en `bus.py` y
+> `scenario.py`, y los `DISCLAIMER` que imprime la demo al ejecutarse). No
+> reutilizar este bus/arquitectura fuera de este ejercicio. Mitigaciones
+> reales en `scenario/checklist.md` de las ramas
+> `agent/07-insecure-inter-agent-communication` y `agent/10-rogue-agents`.
+
 ## Uso desde los notebooks del taller
 
 Los modulos de `agent/` estan pensados para importarse directo desde los
